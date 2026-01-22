@@ -14,12 +14,20 @@ type CounterEl = HTMLElement & {
 };
 
 // Accessibility preference: if a user has "Reduce motion" turned on, we avoid animations.
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// IMPORTANT: This file is shipped to the browser, but we still guard browser-only globals
+// so that it can never crash if evaluated in a non-browser environment.
+const getPrefersReducedMotion = () => {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+};
 
 // Adds a CSS class ("in-view") when elements scroll into view.
 // The CSS for these animations lives in your global styles.
 const initInViewAnimations = () => {
+  if (typeof document === "undefined") return;
+
   const elements = Array.from(document.querySelectorAll<AnimateEl>("[data-animate]"));
+  const prefersReducedMotion = getPrefersReducedMotion();
 
   for (const el of elements) {
     const delay = el.dataset.delay;
@@ -69,7 +77,10 @@ const animateNumber = (el: CounterEl, to: number, durationMs: number) => {
 
 // Finds elements with `data-counter` and runs the animated count-up when they enter view.
 const initCounters = () => {
+  if (typeof document === "undefined") return;
+
   const counters = Array.from(document.querySelectorAll<CounterEl>("[data-counter]"));
+  const prefersReducedMotion = getPrefersReducedMotion();
 
   if (counters.length === 0) return;
 
@@ -107,6 +118,8 @@ const initCounters = () => {
 // - toggles the visibility of the mobile menu
 // - closes the menu when you click a link inside it
 const initMobileNav = () => {
+  if (typeof document === "undefined") return;
+
   const header = document.querySelector<HTMLElement>("[data-header]");
   const button = document.querySelector<HTMLButtonElement>("[data-menu-button]");
   const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
@@ -142,6 +155,8 @@ const initMobileNav = () => {
 // - shows a success message on HTTP 200
 // - shows an error message on HTTP 400/500
 const initContactForm = () => {
+  if (typeof document === "undefined") return;
+
   const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
   if (!form) return;
 
@@ -233,9 +248,11 @@ const initContactForm = () => {
 };
 
 // Run the site behaviors after the HTML has loaded.
-document.addEventListener("DOMContentLoaded", () => {
-  initInViewAnimations();
-  initCounters();
-  initMobileNav();
-  initContactForm();
-});
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    initInViewAnimations();
+    initCounters();
+    initMobileNav();
+    initContactForm();
+  });
+}
