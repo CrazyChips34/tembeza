@@ -1,0 +1,91 @@
+---
+import { Image } from "astro:assets";
+
+import logo from "../assets/Tembeza_logo.png";
+
+const navLinks = [
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Why Us", href: "#why-us" },
+  { label: "FAQs", href: "#faqs" },
+];
+---
+
+<header
+  data-header
+  class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50"
+>
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="flex items-center justify-between h-16 lg:h-20">
+      <a href="#home" class="flex items-center gap-2">
+        <Image src={logo} alt="Tembeza logo" class="w-30 h-30 object-contain" loading="eager" decoding="async" />
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-8" aria-label="Primary">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-muted-foreground hover:text-foreground transition-colors duration-200 text-sm font-medium"
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <a
+        href="#contact"
+        class="hidden lg:inline-flex btn-gradient px-6 py-2.5 rounded-full text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity glow-effect"
+      >
+        Contact Us
+      </a>
+
+      <button
+        type="button"
+        data-menu-button
+        class="lg:hidden p-2 text-foreground"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <span class="icon-when-closed" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </span>
+        <span class="icon-when-open" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <div data-mobile-menu class="lg:hidden bg-background border-b border-border hidden">
+    <nav class="container mx-auto px-4 py-4 flex flex-col gap-4" aria-label="Mobile">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="text-muted-foreground hover:text-foreground transition-colors duration-200 text-sm font-medium py-2"
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="#contact"
+        class="btn-gradient px-6 py-3 rounded-full text-sm font-semibold text-primary-foreground text-center mt-2"
+      >
+        Contact Us
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  button[aria-expanded="false"] .icon-when-open {
+    display: none;
+  }
+  button[aria-expanded="true"] .icon-when-closed {
+    display: none;
+  }
+</style>

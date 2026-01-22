@@ -1,0 +1,159 @@
+---
+import { Image } from "astro:assets";
+
+import chipImage from "../assets/Tembeza_comouterchip.png";
+
+const services = [
+  {
+    title: "Technological Consulting",
+    description:
+      "We optimize systems, data and cybersecurity, streamline management, implement large-scale effective and secure digital solutions.",
+    features: ["System audit/repair", "Data management", "Cybersecurity"],
+    highlighted: false,
+    icon: "server",
+  },
+  {
+    title: "Technical and Digital Development",
+    description:
+      "Propels businesses by creating tailor-made products that improve processes, integrate technologies, and optimize operations' efficiency.",
+    features: ["Custom software development", "Systems integration", "Process automation"],
+    highlighted: true,
+    icon: "code",
+  },
+  {
+    title: "Technical Maintenance",
+    description:
+      "Ensures the maximum operation of systems by updating, monitoring and troubleshooting with proactive solutions.",
+    features: ["Preventive Maintenance", "24/7 Technical Support", "Software updates"],
+    highlighted: false,
+    icon: "wrench",
+  },
+];
+
+const iconPath = (name: string) => {
+  switch (name) {
+    case "server":
+      return "M4 6h16v4H4z M4 14h16v4H4z M7 8h.01 M7 16h.01";
+    case "code":
+      return "M16 18l6-6-6-6 M8 6l-6 6 6 6";
+    case "wrench":
+      return "M22 2l-6 6 2 2 6-6V2h-2z M14 8l-8 8a4 4 0 0 0 6 6l8-8";
+    default:
+      return "";
+  }
+};
+---
+
+<section id="services" class="relative overflow-hidden py-20 lg:py-32">
+  <!-- Background image -->
+  <Image src={chipImage} alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
+
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-b from-secondary/40 via-background to-background"></div>
+
+  <!-- Content -->
+  <div class="container mx-auto px-4 lg:px-8 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      
+      <!-- LEFT -->
+      <h2
+        data-animate="fade-left"
+        class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground"
+      >
+        What can we
+        <br />
+        offer <span class="text-gradient">you?</span>
+      </h2>
+
+      <!-- RIGHT -->
+      <p
+        data-animate="fade-right"
+        data-delay="150"
+        class="text-muted-foreground text-lg max-w-2xl text-right justify-self-end"
+      >
+        At Tembeza we offer you expert advice, bespoke technical development and ongoing maintenance to optimize your
+        technology, improve efficiency and ensure outstanding performance.
+      </p>
+
+    </div>
+
+    <div class="mt-12 lg:mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      {services.map((service, index) => (
+        <div
+          data-animate="fade-up"
+          data-delay={String(200 + index * 150)}
+          class:list={[
+            "relative p-8 rounded-2xl border transition-all duration-300",
+            "hover:-translate-y-2",
+            service.highlighted
+              ? "bg-primary border-primary shadow-lg shadow-primary/20"
+              : "bg-card/50 border-border/50 hover:border-primary/30",
+          ]}
+        >
+          <div
+            class:list={[
+              "w-14 h-14 rounded-xl flex items-center justify-center mb-6",
+              service.highlighted ? "bg-primary-foreground/10" : "bg-primary/10",
+            ]}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              class:list={["w-7 h-7", service.highlighted ? "text-primary-foreground" : "text-primary"]}
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d={iconPath(service.icon)} />
+            </svg>
+          </div>
+
+          <h3
+            class:list={[
+              "font-display text-xl font-semibold mb-3",
+              service.highlighted ? "text-primary-foreground" : "text-foreground",
+            ]}
+          >
+            {service.title}
+          </h3>
+
+          <p
+            class:list={[
+              "text-sm mb-6 leading-relaxed",
+              service.highlighted ? "text-primary-foreground/80" : "text-muted-foreground",
+            ]}
+          >
+            {service.description}
+          </p>
+
+          <ul class="space-y-3">
+            {service.features.map((feature) => (
+              <li
+                class:list={[
+                  "flex items-center gap-3 text-sm",
+                  service.highlighted ? "text-primary-foreground/90" : "text-muted-foreground",
+                ]}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  class:list={["w-4 h-4 flex-shrink-0", service.highlighted ? "text-primary-foreground" : "text-primary"]}
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

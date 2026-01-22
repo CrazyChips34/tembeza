@@ -1,0 +1,62 @@
+---
+// This file is the shared "shell" (layout) used by every page.
+// Pages render their own content inside the <slot /> below.
+// Keeping shared structure here prevents duplication across pages.
+
+// Global styles live here:
+// - Tailwind layers (base/components/utilities)
+// - SCSS variables and site-wide styling
+import "../styles/global.scss";
+
+import siteScript from "../scripts/site.ts?url";
+
+type Props = {
+  title?: string;
+  description?: string;
+};
+
+const {
+  title = "Tembeza - Revolutionize Your Technology, Exceed Your Goals",
+  description =
+    "Tembeza offers expert technology consulting, digital development, and reliable maintenance. Transform your technology with innovation and efficiency.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Tembeza International" />
+    <meta
+      name="keywords"
+      content="technology consulting, digital development, IT maintenance, software solutions, system optimization"
+    />
+
+    <meta property="og:title" content="Tembeza - Innovation, Development and Support" />
+    <meta
+      property="og:description"
+      content="Expert technology consulting, digital development, and reliable maintenance tailored to you."
+    />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@tembeza" />
+  </head>
+
+  <body>
+    <!-- Page content gets injected here -->
+    <slot />
+
+    <!--
+      Site-wide client-side behavior (small + performance-friendly):
+      - scroll animations
+      - counters
+      - mobile nav toggle
+      - contact form submit handler
+    -->
+    <script type="module" src={siteScript}></script>
+  </body>
+</html>

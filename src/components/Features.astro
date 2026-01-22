@@ -1,0 +1,85 @@
+---
+const features = [
+  {
+    number: "01",
+    title: "Comprehensive Consulting",
+    description: "We offer expert technology innovation, addressing digital systems and strategies.",
+    icon: "bulb",
+  },
+  {
+    number: "02",
+    title: "Custom development",
+    description: "We create tailored technical and digital solutions with efficiency and innovation.",
+    icon: "code",
+  },
+  {
+    number: "03",
+    title: "Reliable Maintenance",
+    description:
+      "We guarantee continuous support, updating and repair to ensure the optimal performance of your systems.",
+    icon: "settings",
+  },
+];
+
+const iconPath = (name: string) => {
+  switch (name) {
+    case "bulb":
+      return "M9 18h6 M10 22h4 M12 2a7 7 0 0 0-4 12c.6.5 1 1.2 1 2v1h6v-1c0-.8.4-1.5 1-2a7 7 0 0 0-4-12z";
+    case "code":
+      return "M16 18l6-6-6-6 M8 6l-6 6 6 6";
+    case "settings":
+      return "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M19.4 15a7.9 7.9 0 0 0 .1-1 7.9 7.9 0 0 0-.1-1l2-1.5-2-3.5-2.3 1a7.6 7.6 0 0 0-1.7-1l-.3-2.5h-4l-.3 2.5a7.6 7.6 0 0 0-1.7 1l-2.3-1-2 3.5 2 1.5a7.9 7.9 0 0 0-.1 1 7.9 7.9 0 0 0 .1 1l-2 1.5 2 3.5 2.3-1a7.6 7.6 0 0 0 1.7 1l.3 2.5h4l.3-2.5a7.6 7.6 0 0 0 1.7-1l2.3 1 2-3.5-2-1.5z";
+    default:
+      return "";
+  }
+};
+---
+
+<section id="about" class="py-20 lg:py-32 relative">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div data-animate="fade-up" class="text-center mb-16">
+      <span class="text-primary text-sm font-semibold tracking-widest uppercase mb-4 block">
+        Passion • Dedication • Professionalism
+      </span>
+      <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground max-w-3xl mx-auto">
+        Tembeza: Innovation, Development
+        <br />
+        and Support tailored to <span class="text-gradient">you.</span>
+      </h2>
+    </div>
+
+    <div class="max-w-4xl mx-auto space-y-6">
+      {features.map((feature, index) => (
+        <div
+          data-animate="fade-left"
+          data-delay={String(150 + index * 150)}
+          class="relative flex items-start gap-6 p-6 rounded-2xl bg-card/30 border border-border/30 hover:border-primary/30 hover:bg-card/50 transition-all duration-300 group hover:translate-x-2"
+        >
+          <span class="font-display text-5xl md:text-6xl font-bold text-primary/20 group-hover:text-primary/30 transition-colors">
+            {feature.number}
+          </span>
+
+          <div class="w-12 h-12 flex-shrink-0 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+            <svg
+              viewBox="0 0 24 24"
+              class="w-6 h-6 text-primary"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d={iconPath(feature.icon)} />
+            </svg>
+          </div>
+
+          <div class="flex-1">
+            <h3 class="font-display text-xl font-semibold text-foreground mb-2">{feature.title}</h3>
+            <p class="text-muted-foreground leading-relaxed">{feature.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

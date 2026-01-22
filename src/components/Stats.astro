@@ -1,0 +1,46 @@
+---
+const stats = [
+  { value: 5, prefix: "+", suffix: "", label: "Years of Experience" },
+  { value: 76, prefix: "", suffix: "%", label: "Downtime" },
+  { value: 3000, prefix: "", suffix: "", label: "Projects carried out" },
+];
+---
+
+<section class="py-20 lg:py-32 relative">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div data-animate="fade-up" class="text-center mb-16">
+      <span class="text-primary text-xs font-semibold tracking-widest uppercase mb-4 block">
+        Tembeza's Achievements and Successes
+      </span>
+      <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+        We promote your technology,
+        <br />
+        we achieve <span class="text-gradient">results.</span>
+      </h2>
+      <p class="text-muted-foreground text-lg max-w-3xl mx-auto">
+        We stand out for our high customer satisfaction, significant reduction in downtime and improvements in
+        operational efficiency. Trust us to transform and optimize your technology with effective results.
+      </p>
+    </div>
+
+    <div
+      data-animate="fade-up"
+      data-delay="150"
+      class="grid md:grid-cols-3 gap-8 md:gap-12 max-w-4xl mx-auto text-center"
+    >
+      {stats.map((stat, index) => (
+        <div data-animate="scale-in" data-delay={String(250 + index * 120)} class="relative">
+          <span
+            data-counter={String(stat.value)}
+            data-prefix={stat.prefix}
+            data-suffix={stat.suffix}
+            class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary"
+          >
+            {stat.prefix}0{stat.suffix}
+          </span>
+          <p class="text-muted-foreground mt-3">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

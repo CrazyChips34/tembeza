@@ -1,0 +1,75 @@
+---
+import { Image } from "astro:assets";
+
+import logo from "../assets/Tembeza_logo.png";
+
+const footerLinks = [
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Why Us", href: "#why-us" },
+  { label: "FAQs", href: "#faqs" },
+  { label: "Contact", href: "#contact" },
+];
+
+const legalLinks = [
+  { label: "Privacy Policy", href: "#" },
+  { label: "Terms of Service", href: "#" },
+  { label: "Cookie Policy", href: "#" },
+];
+
+const email = "tiffanypietersen234@gmail.com";
+---
+
+<footer class="py-12 lg:py-16 bg-background border-t border-border/50">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="flex flex-col items-center mb-10">
+      <a href="#home" data-animate="fade-up" class="flex items-center gap-2 mb-8">
+        <Image src={logo} alt="Tembeza logo" class="w-10 h-10 object-contain" loading="lazy" decoding="async" />
+      </a>
+
+      <nav data-animate="fade-up" data-delay="100" class="flex flex-wrap justify-center gap-6 md:gap-8 mb-8" aria-label="Footer">
+        {footerLinks.map((link) => (
+          <a href={link.href} class="text-muted-foreground hover:text-foreground transition-colors text-sm">
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <a
+        data-animate="fade-up"
+        data-delay="200"
+        href={`mailto:${email}`}
+        class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 4h16v16H4z" />
+          <path d="M22 6l-10 7L2 6" />
+        </svg>
+        <span class="text-sm">{email}</span>
+      </a>
+    </div>
+
+    <div class="border-t border-border/50 pt-8">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-sm text-muted-foreground text-center md:text-left">© Copyright Tembeza International. All Rights Reserved.</p>
+        <div class="flex gap-6">
+          {legalLinks.map((link) => (
+            <a href={link.href} class="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
