@@ -111,7 +111,17 @@ const initCounters = () => {
     { rootMargin: "-100px 0px" },
   );
 
-  for (const el of counters) observer.observe(el);
+  // Fallback: if IntersectionObserver never fires (e.g., script blocked), show numbers after a short delay
+  setTimeout(() => {
+    for (const el of counters) {
+      if (el.textContent && !el.textContent.includes("0")) continue; // already animated
+      const raw = el.dataset.counter;
+      const to = raw ? Number(raw) : 0;
+      const prefix = el.dataset.prefix ?? "";
+      const suffix = el.dataset.suffix ?? "";
+      el.textContent = `${prefix}${to.toLocaleString()}${suffix}`;
+    }
+  }, 3000);
 };
 
 // Mobile menu behavior:

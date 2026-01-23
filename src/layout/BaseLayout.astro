@@ -8,8 +8,6 @@
 // - SCSS variables and site-wide styling
 import "../styles/global.scss";
 
-import siteScript from "../scripts/site.ts?url";
-
 type Props = {
   title?: string;
   description?: string;
@@ -61,6 +59,8 @@ const {
       - mobile nav toggle
       - contact form submit handler
     -->
-    <script type="module" src={siteScript}></script>
+    <script type="module">
+      import "../scripts/site.ts";
+    </script>
   </body>
 </html>
