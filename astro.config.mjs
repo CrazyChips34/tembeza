@@ -4,7 +4,7 @@ import { defineConfig } from 'astro/config';
 // Official Astro integrations (preferred over manual Vite plugins)
 import tailwind from '@astrojs/tailwind';
 // Vercel adapter enables server-side rendering + API routes in production
-import vercel from '@astrojs/vercel';
+import vercel from '@astrojs/vercel/serverless';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,7 +12,7 @@ export default defineConfig({
   output: 'server',
 
   // Vercel serverless functions adapter (recommended for Astro + API routes).
-  adapter: vercel(),
+  adapter: vercel({}),
 
   // Tailwind integration sets up PostCSS + Tailwind for you.
   integrations: [tailwind()],
