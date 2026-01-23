@@ -1,6 +1,10 @@
 // Accessibility preference: if a user has "Reduce motion" turned on, we avoid animations.
 // IMPORTANT: This file is shipped to the browser, but we still guard browser-only globals
 // so that it can never crash if evaluated in a non-browser environment.
+if (typeof document !== "undefined") {
+  document.documentElement.classList.add("js");
+}
+
 const getPrefersReducedMotion = () => {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
