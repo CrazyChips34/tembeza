@@ -221,20 +221,31 @@ const initContactForm = () => {
         body: JSON.stringify(payload),
       });
 
+      const maybeJson = async () => {
+        try {
+          return await res.json();
+        } catch {
+          return null;
+        }
+      };
+
       // `res.ok` means HTTP 200-299.
       if (res.ok) {
         setSuccess();
         return;
       }
 
+      const data = await maybeJson();
+      const apiMessage = data && typeof data.error === "string" ? data.error : "";
+
       // 400 = validation error (e.g. missing fields, invalid email format)
       if (res.status === 400) {
-        setError("Please check your details and try again.");
+        setError(apiMessage || "Please check your details and try again.");
         return;
       }
 
       // 500 = server rejected the email domain (brief requirement)
-      setError("Internal server error. Please try again later.");
+      setError(apiMessage || "Internal server error. Please try again later.");
     } catch {
       // Network error (offline, blocked request, etc.)
       setError("Internal server error. Please try again later.");

@@ -1,6 +1,8 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 
+const ALLOWED_EMAIL_DOMAIN = (import.meta as any).env?.CONTACT_ALLOWED_EMAIL_DOMAIN ?? "inkblot.co.za";
+
 const contactSchema = z.object({
   name: z.string().min(1).max(100),
   email: z.string().trim().email().max(255),
@@ -18,6 +20,17 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({ ok: false, error: "Invalid form data" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const email = parsed.data.email.toLowerCase();
+    if (!email.endsWith(`@${String(ALLOWED_EMAIL_DOMAIN).toLowerCase()}`)) {
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: `Only @${ALLOWED_EMAIL_DOMAIN} email addresses are allowed.`,
+        }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
       );
     }
 
