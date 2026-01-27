@@ -5,14 +5,14 @@ if (typeof document !== "undefined") {
   document.documentElement.classList.add("js");
 }
 
-const getPrefersReducedMotion = () => {
+function getPrefersReducedMotion() {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-};
+}
 
 // Adds a CSS class ("in-view") when elements scroll into view.
 // The CSS for these animations lives in your global styles.
-const initInViewAnimations = () => {
+function initInViewAnimations() {
   if (typeof document === "undefined") return;
 
   const elements = Array.from(document.querySelectorAll("[data-animate]"));
@@ -41,12 +41,12 @@ const initInViewAnimations = () => {
   );
 
   for (const el of elements) observer.observe(el);
-};
+}
 
 // Animates a number from 0 -> a target number (used for "stats" counters).
-const animateNumber = (el, to, durationMs) => {
-  const prefix = el.dataset.prefix ?? "";
-  const suffix = el.dataset.suffix ?? "";
+function animateNumber(el, to, durationMs) {
+  const prefix = el.dataset.prefix || "";
+  const suffix = el.dataset.suffix || "";
 
   const start = performance.now();
   const from = 0;
@@ -62,10 +62,10 @@ const animateNumber = (el, to, durationMs) => {
   };
 
   requestAnimationFrame(tick);
-};
+}
 
 // Finds elements with `data-counter` and runs the animated count-up when they enter view.
-const initCounters = () => {
+function initCounters() {
   if (typeof document === "undefined") return;
 
   const counters = Array.from(document.querySelectorAll("[data-counter]"));
@@ -77,8 +77,8 @@ const initCounters = () => {
     for (const el of counters) {
       const raw = el.dataset.counter;
       const to = raw ? Number(raw) : 0;
-      const prefix = el.dataset.prefix ?? "";
-      const suffix = el.dataset.suffix ?? "";
+      const prefix = el.dataset.prefix || "";
+      const suffix = el.dataset.suffix || "";
       el.textContent = `${prefix}${to.toLocaleString()}${suffix}`;
     }
     return;
@@ -106,17 +106,17 @@ const initCounters = () => {
       if (el.textContent && !el.textContent.includes("0")) continue; // already animated
       const raw = el.dataset.counter;
       const to = raw ? Number(raw) : 0;
-      const prefix = el.dataset.prefix ?? "";
-      const suffix = el.dataset.suffix ?? "";
+      const prefix = el.dataset.prefix || "";
+      const suffix = el.dataset.suffix || "";
       el.textContent = `${prefix}${to.toLocaleString()}${suffix}`;
     }
   }, 3000);
-};
+}
 
 // Mobile menu behavior:
 // - toggles the visibility of the mobile menu
 // - closes the menu when you click a link inside it
-const initMobileNav = () => {
+function initMobileNav() {
   if (typeof document === "undefined") return;
 
   const header = document.querySelector("[data-header]");
@@ -125,15 +125,15 @@ const initMobileNav = () => {
 
   if (!header || !button || !menu) return;
 
-  const close = () => {
+  function close() {
     menu.classList.add("hidden");
     button.setAttribute("aria-expanded", "false");
-  };
+  }
 
-  const open = () => {
+  function open() {
     menu.classList.remove("hidden");
     button.setAttribute("aria-expanded", "true");
-  };
+  }
 
   close();
 
@@ -147,13 +147,21 @@ const initMobileNav = () => {
     const target = e.target;
     if (target && target.closest && target.closest("a")) close();
   });
-};
+}
 
 // Contact form behavior:
 // - sends the form to `/api/contact` (our Astro API route)
 // - shows a success message on HTTP 200
 // - shows an error message on HTTP 400/500
-const initContactForm = () => {
+async function safeReadJson(res) {
+  try {
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+function initContactForm() {
   if (typeof document === "undefined") return;
 
   const form = document.querySelector("[data-contact-form]");
@@ -165,45 +173,47 @@ const initContactForm = () => {
   const submitButton = form.querySelector("button[type='submit']");
   const resetButton = document.querySelector("[data-contact-reset]");
 
-  const setIdle = () => {
-    successView?.classList.add("hidden");
-    errorView?.classList.add("hidden");
+  function setIdle() {
+    if (successView) successView.classList.add("hidden");
+    if (errorView) errorView.classList.add("hidden");
     if (submitButton) {
       submitButton.disabled = false;
       submitButton.dataset.state = "idle";
     }
-  };
+  }
 
-  const setLoading = () => {
-    errorView?.classList.add("hidden");
+  function setLoading() {
+    if (errorView) errorView.classList.add("hidden");
     if (submitButton) {
       submitButton.disabled = true;
       submitButton.dataset.state = "loading";
     }
-  };
+  }
 
-  const setSuccess = () => {
+  function setSuccess() {
     form.classList.add("hidden");
-    successView?.classList.remove("hidden");
-  };
+    if (successView) successView.classList.remove("hidden");
+  }
 
-  const setError = (message) => {
-    errorText && (errorText.textContent = message);
-    errorView?.classList.remove("hidden");
+  function setError(message) {
+    if (errorText) errorText.textContent = message;
+    if (errorView) errorView.classList.remove("hidden");
     if (submitButton) {
       submitButton.disabled = false;
       submitButton.dataset.state = "idle";
     }
-  };
+  }
 
   setIdle();
 
-  resetButton?.addEventListener("click", () => {
-    successView?.classList.add("hidden");
-    form.classList.remove("hidden");
-    form.reset();
-    setIdle();
-  });
+  if (resetButton) {
+    resetButton.addEventListener("click", () => {
+      if (successView) successView.classList.add("hidden");
+      form.classList.remove("hidden");
+      form.reset();
+      setIdle();
+    });
+  }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -225,21 +235,13 @@ const initContactForm = () => {
         body: JSON.stringify(payload),
       });
 
-      const maybeJson = async () => {
-        try {
-          return await res.json();
-        } catch {
-          return null;
-        }
-      };
-
       // `res.ok` means HTTP 200-299.
       if (res.ok) {
         setSuccess();
         return;
       }
 
-      const data = await maybeJson();
+      const data = await safeReadJson(res);
       const apiMessage = data && typeof data.error === "string" ? data.error : "";
 
       // 400 = validation error (e.g. missing fields, invalid email format)
@@ -255,7 +257,7 @@ const initContactForm = () => {
       setError("Internal server error. Please try again later.");
     }
   });
-};
+}
 
 // Run the site behaviors after the HTML has loaded.
 if (typeof document !== "undefined") {
